@@ -6,22 +6,27 @@ using System.Threading.Tasks;
 
 namespace Jatek
 {
-    class Valasz
-    { 
-        public void Odamentem()
-        {
-            Console.WriteLine("Odamentem.");
-        }
-        public void EbbenASzobabanNincsIlyen()
-        {
-            Console.WriteLine("Ebben a szobában nincs ilyen.");
-        }
-        public void Nyertel()
-        {
-            Console.WriteLine("Gratulálok! Megszöktél. A kilépéshez nyomj meg egy gombot...");
-            Console.ReadLine();
-            Environment.Exit(0);
-        }
+   
+    static class Valasz
+    {
+        public static void csakFeszitovassalTorheto() { Console.WriteLine("Ez a tárgy csak feszítővassal törhető!"); }
+        public static void eztNemLehetOsszetroni() { Console.WriteLine("Ezt a tárgyat nem lehet összetörni!"); }
+        public static void nemAdtadMegMitTorjek() { Console.WriteLine("Nem adtad meg hogy mit törjek össze!"); }
+        public static void csakKulccsal() { Console.WriteLine("Ezt a tárgyat csak kulccsal lehet kinyitni!"); }
+        public static void nemLehetKinyitni() { Console.WriteLine("Ezt a tárgyat nem lehet kinyitni!"); }
+        public static void mitNyissakKi() { Console.WriteLine("Nem adtad meg hogy mit nyissak ki!"); }
+        public static void nemaAdtaMegMitHuzzak() { Console.WriteLine("Nem adtad meg mit húzzak el!"); }
+        public static void eztNemTudomMegnezni() { Console.WriteLine("Ezt nem tudom megnézni."); }
+        public static void melyikIrany(){Console.WriteLine("Nem adtál meg irányt!");}
+        public static void rosszIrany(){Console.WriteLine("Ebbe az irányba nem tudok menni.");}
+        public static void elhuz(){Console.WriteLine("Ezt a tárgyat nem tudod elhúzni!");}
+        static public void le(){Console.WriteLine("Ezt a tárgyat nem tudod letenni, mert nincs is nálad!");}
+        static public void teddle(){Console.WriteLine("A \"tedd\" kulcsszó után csak a \"le\" kulcsszót használható.");}
+        static public void fel(){Console.WriteLine("Ezt a tárgyat nem tudod felvenni.");}
+        static public void veddfel(){Console.WriteLine("A \"vedd\" kulcsszó után csak a \"fel\" kulcsszót használható.");}
+        static public void NincsHarom() { Console.WriteLine("Ennek a parancsnak nincs harmadik paramétere."); }
+        static public void EbbenASzobabanNincsIlyen() { Console.WriteLine("Ebben a szobában nincs ilyen."); }
+        static public void HibasParancs() { Console.WriteLine("Hibás parancsot adtál meg!"); }
     }
     class AlapTulajdonsagok
     {
@@ -40,10 +45,23 @@ namespace Jatek
         
 
     }
+
     
     class Eldont
     {
         private List<string> iranyok = new List<string>() { "észak", "dél", "kelet", "nyugat" };
+        private List<string> targyak = new List<string>() { "szekrény", "ágy", "kád", "ajtó", "ablak", "doboz", "kulcs", "feszítővas" };
+        private List<string> felveheto_targyak = new List<string>() {"doboz","kulcs","feszitővas"};
+        private List<string> nem_nyithato = new List<string>() { "le", "fel", "észak", "dél", "kelet", "nyugat", "ágy", "kád", "ablak", "kulcs", "feszítővas" };
+        private List<string> nem_torheto = new List<string>() { "le", "fel", "észak", "dél", "kelet", "nyugat", "szekrény", "ágy", "kád", "ajtó", "doboz", "kulcs", "feszítővas" };
+        private List<string> elhuzhato = new List<string>() {"szekrény"};
+        private List<string> nyithato = new List<string>() {"szekrény","doboz"};
+        private List<string> kulcsal_nyithato = new List<string>() {"ajtó"};
+        private List<string> torheto = new List<string>() {};
+        private List<string> feszitovassal_torheto = new List<string>() {"ablak"};
+        private List<string> nyitoeszkoz = new List<string>() {"kulcs"};
+        private List<string> toroeszkoz = new List<string>() {"feszítővas"};
+
 
         public string a;
         public string b;
@@ -57,12 +75,148 @@ namespace Jatek
         
         public void Megnez()
         {
-            if ((a.Equals("menj")&&(b!="észak"))|| (a.Equals("menj") && (b != "dél"))|| (a.Equals("menj") && (b != "kelet"))||( a.Equals("menj") && (b != "nyugat")))
+            bool dupla = false;
+            bool ures_b = String.IsNullOrEmpty(b);
+            bool ures_c = String.IsNullOrEmpty(c);
+            #region menj parancs hibakeresése
+            if ((a.Equals("menj")))
             {
-                Console.WriteLine("Hibás parancs!");           
+                if (ures_b.Equals(true))
+                {
+                    Valasz.melyikIrany();
+                }
+                if (iranyok.Contains(b).Equals(false)&&ures_b.Equals(false))
+                {
+                    Valasz.rosszIrany();
+                }
+                if (ures_c.Equals(false))
+                {
+                    Valasz.NincsHarom();
+                }
             }
-            
-            
+#endregion
+            #region nézd parancs hibakeresése
+            if (a.Equals("nézd")&&ures_b.Equals(false))
+            {
+                if (ures_c.Equals(false))
+                {
+                    Valasz.NincsHarom();
+                }
+                if (targyak.Contains(b).Equals(false))
+                {
+                    Valasz.eztNemTudomMegnezni();
+                }
+            }
+#endregion
+            #region vedd fel parancs hibakeresése
+            if (a.Equals("vedd")&&b!="fel")
+            {
+                Valasz.veddfel();
+            }
+            if (ures_b.Equals(false)&&(a.Equals("vedd")&&b.Equals("fel")))
+            {
+                if (felveheto_targyak.Contains(c).Equals(false))
+                {
+                    Valasz.fel();
+                }
+            }
+#endregion
+            #region tedd le parancs hibakeresése
+            if (a.Equals("tedd")&&b!="le")
+            {
+                Valasz.teddle();
+            }
+            if (ures_b.Equals(false) && (a.Equals("tedd") && b.Equals("le")))
+            {
+                if (felveheto_targyak.Contains(c).Equals(false))
+                {
+                    Valasz.le();
+                }
+            }
+#endregion
+            #region húzd parancs hibakeresése
+            if (a.Equals("húzd"))
+            {
+                if (ures_b.Equals(true))
+                {
+                    Valasz.nemaAdtaMegMitHuzzak();
+                }
+                if (ures_c.Equals(false))
+                {
+                    Valasz.NincsHarom();
+                }
+                if (elhuzhato.Contains(b).Equals(false) && ures_b.Equals(false))
+                {
+                    Valasz.elhuz();
+                }
+            }
+            #endregion
+            #region nyisd parancs hibakeresése
+            if (a.Equals("nyisd")&&ures_b.Equals(true))
+            {
+                Valasz.mitNyissakKi();
+            }
+            if (a.Equals("nyisd") && nyithato.Contains(b).Equals(false)&&ures_b.Equals(false)&&kulcsal_nyithato.Contains(b).Equals(false))
+            {
+                Valasz.nemLehetKinyitni();
+                dupla = true;
+            }
+            if (a.Equals("nyisd") && kulcsal_nyithato.Contains(b).Equals(true) && ures_b.Equals(true))
+            {
+                Valasz.csakKulccsal();
+            }
+            if (a.Equals("nyisd")&&nyithato.Contains(b).Equals(true)&&ures_c.Equals(false))
+            {
+                Valasz.NincsHarom();
+            }
+            if (a.Equals("nyisd")&&kulcsal_nyithato.Contains(b).Equals(true)&&nyitoeszkoz.Contains(c).Equals(false))
+            {
+                Valasz.csakKulccsal();
+            }
+            if (a.Equals("nyisd")&&nem_nyithato.Contains(b).Equals(true)&&ures_c.Equals(false))
+            {
+                if (dupla.Equals(false))
+                {
+                    Valasz.nemLehetKinyitni();
+                }
+                
+            }
+            dupla = false;
+            #endregion
+            #region törd parancs hibakeresése
+            if (a.Equals("törd") && ures_b.Equals(true))
+            {
+                Valasz.nemAdtadMegMitTorjek();
+            }
+            if (a.Equals("törd") && torheto.Contains(b).Equals(false) && ures_b.Equals(false) && feszitovassal_torheto.Contains(b).Equals(false))
+            {
+                Valasz.eztNemLehetOsszetroni();
+                dupla = true;
+            }
+            if (a.Equals("törd") && feszitovassal_torheto.Contains(b).Equals(true) && ures_b.Equals(true))
+            {
+                Valasz.csakFeszitovassalTorheto();
+            }
+            if (a.Equals("törd") && torheto.Contains(b).Equals(true) && ures_c.Equals(false))
+            {
+                Valasz.NincsHarom();
+            }
+            if (a.Equals("törd") && feszitovassal_torheto.Contains(b).Equals(true) && toroeszkoz.Contains(c).Equals(false))
+            {
+                Valasz.csakFeszitovassalTorheto();
+            }
+            if (a.Equals("törd") && nem_torheto.Contains(b).Equals(true) && ures_c.Equals(false))
+            {
+                if (dupla.Equals(false))
+                {
+                    Valasz.eztNemLehetOsszetroni();
+                }
+
+            }
+            #endregion
+
+
+
         }
     }
     
@@ -72,8 +226,8 @@ namespace Jatek
         public string b;
         public string c;
 
-        private List<string> elso = new List<string>() {"menj","nézd","vedd fel","tedd le","nyisd","húzd","törd","leltár","mentés","betöltés" };
-        private List<string> masodik = new List<string>() {"észak","dél","kelet","nyugat","szekrény","ágy","kád","ajtó","ablak","doboz","kulcs","feszítővas" };
+        private List<string> elso = new List<string>() {"menj","nézd","vedd","tedd","nyisd","húzd","törd","leltár","mentés","betöltés" };
+        private List<string> masodik = new List<string>() {"le","fel","észak","dél","kelet","nyugat","szekrény","ágy","kád","ajtó","ablak","doboz","kulcs","feszítővas" };
 
         public Hiba(List<string> lista)
         {
@@ -99,16 +253,46 @@ namespace Jatek
             }
             else
             {
-                Console.WriteLine("Hibás parancsot adtál meg! A kilépéshez nyomj meg egy gombot...");
-                Console.ReadLine();
-                Environment.Exit(0);
+                Valasz.HibasParancs();
             }
             
             
         }
         
     }
-    
+    class Metodusok 
+    {
+        public string a;
+        public string b;
+        public string c;
+        public Metodusok(string a, string b, string c)
+        {
+            this.a = a;
+            this.b = b;
+            this.c = c;
+        }
+       
+    }
+    class Parancs 
+    {
+        
+
+        public string a;
+        public string b;
+        public string c;
+        public Parancs(string a, string b, string c)
+        {
+            this.a = a;
+            this.b = b;
+            this.c = c;
+        }
+
+    }
+    class Szoba 
+    {
+        public static Dictionary<string, string> szoba = new Dictionary<string, string>();
+        
+    }
     class Program
     {
         static void Main(string[] args)
@@ -119,6 +303,9 @@ namespace Jatek
             Hiba h = new Hiba(lista);
             Eldont e = new Eldont(h.a,h.b,h.c);
             e.Megnez();
+
+            
+
             Console.ReadKey();
         }
     }

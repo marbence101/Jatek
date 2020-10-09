@@ -40,10 +40,27 @@ namespace Jatek
         
 
     }
-    class Parancsok
+    
+    class Eldont
     {
-        public void Menj()
+        private List<string> iranyok = new List<string>() { "észak", "dél", "kelet", "nyugat" };
+
+        public string a;
+        public string b;
+        public string c;
+        public Eldont(string a, string b, string c)
         {
+            this.a = a;
+            this.b = b;
+            this.c = c;
+        }
+        
+        public void Megnez()
+        {
+            if ((a.Equals("menj")&&(b!="észak"))|| (a.Equals("menj") && (b != "dél"))|| (a.Equals("menj") && (b != "kelet"))||( a.Equals("menj") && (b != "nyugat")))
+            {
+                Console.WriteLine("Hibás parancs!");           
+            }
             
             
         }
@@ -100,9 +117,8 @@ namespace Jatek
             List<string> lista = new List<string>();
             lista.AddRange(parancs.Split(' '));
             Hiba h = new Hiba(lista);
-            
-           
-            
+            Eldont e = new Eldont(h.a,h.b,h.c);
+            e.Megnez();
             Console.ReadKey();
         }
     }

@@ -264,6 +264,8 @@ namespace Jatek
         protected List<string> nappalibol_lathato = new List<string>() { "szekrény", "ágy", "ajtó" };
         protected List<string> furdobol_nem_lathato = new List<string>() { "ablak", "szekrény", "ágy", "doboz", "kulcs", "feszítővas" };
         protected List<string> furdobol_lathato = new List<string>() { "kád", "ajtó" };
+
+        protected List<string> nezes_utan_lathato = new List<string>() {"kád"};
         
         protected Dictionary<string, string> tarolnak_benne = new Dictionary<string, string>() { { "kád", "feszítővas" }, { "szekrény", "doboz" }, { "doboz", "kulcs" } };
         protected Dictionary<string, string> nappali_szoba = new Dictionary<string, string>() { { "észak", "szekrény" }, { "dél", "fal" }, { "kelet", "ágy" }, { "nyugat", "ajtó" } };
@@ -322,11 +324,11 @@ namespace Jatek
                 hamis = true;
             }
             List<string> keres = (from x in tarolnak_benne where x.Key.Equals(targy) select x.Value).ToList();
-            if (tarolnak_benne.Keys.Contains(targy))
+            if (tarolnak_benne.Keys.Contains(targy)&&(nyitva_van.Contains(targy)||nezes_utan_lathato.Contains(targy)))
             {
                 Console.WriteLine("-van benne egy {0}", keres[0]);
                 hamis = true;
-            }
+            }     
             if (hamis.Equals(false))
             {
                 Console.WriteLine("Ennek a tárgynak nincs semmi különleges tulajdonsága!");
@@ -354,7 +356,7 @@ namespace Jatek
             lista = parancsok;
 
             #region mentes/betoltes
-            List<List<string>> nevek = new List<List<string>>() {iranyok,targyak,felveheto_targyak,elhuzhato,el_van_huzva,nincs_elhuzva,kezzel_nyithato,kulcsal_nyithato,nem_nyithato,nyitoeszkoz,nyitva_van,nincs_nyitva,kezzel_torheto,feszitovassal_torheto, nem_torheto, toroeszkoz, torve_van, nincs_torve, legutolso_ervenyes_irany, leltar, nappalibol_nem_lathato, nappalibol_lathato,furdobol_nem_lathato,furdobol_lathato};
+            List<List<string>> nevek = new List<List<string>>() {iranyok,targyak,felveheto_targyak,elhuzhato,el_van_huzva,nincs_elhuzva,kezzel_nyithato,kulcsal_nyithato,nem_nyithato,nyitoeszkoz,nyitva_van,nincs_nyitva,kezzel_torheto,feszitovassal_torheto, nem_torheto, toroeszkoz, torve_van, nincs_torve, legutolso_ervenyes_irany, leltar, nappalibol_nem_lathato, nappalibol_lathato,furdobol_nem_lathato,furdobol_lathato, nezes_utan_lathato };
             List<Dictionary<string, string>> nevek2 = new List<Dictionary<string, string>>() {tarolnak_benne,nappali_szoba,furdo_szoba};
             
             if (lista[0].Equals("mentés"))
@@ -651,6 +653,8 @@ namespace Jatek
                         nincs_elhuzva.Remove(lista[1]);
                         nappalibol_lathato.Add("ablak");
                         nappalibol_nem_lathato.Remove("ablak");
+                        nappali_szoba.Remove("észak");
+                        nappali_szoba.Add("észak","szekrény és egy ablak");
                         Console.WriteLine("Elhúztam!");
                     }
                     else

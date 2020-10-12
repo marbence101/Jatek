@@ -351,10 +351,12 @@ namespace Jatek
         public void Eldont(List<string> parancsok)
         {
 
+            lista = parancsok;
 
+            #region mentes/betoltes
             List<List<string>> nevek = new List<List<string>>() {iranyok,targyak,felveheto_targyak,elhuzhato,el_van_huzva,nincs_elhuzva,kezzel_nyithato,kulcsal_nyithato,nem_nyithato,nyitoeszkoz,nyitva_van,nincs_nyitva,kezzel_torheto,feszitovassal_torheto, nem_torheto, toroeszkoz, torve_van, nincs_torve, legutolso_ervenyes_irany, leltar, nappalibol_nem_lathato, nappalibol_lathato,furdobol_nem_lathato,furdobol_lathato};
             List<Dictionary<string, string>> nevek2 = new List<Dictionary<string, string>>() {tarolnak_benne,nappali_szoba,furdo_szoba};
-            lista = parancsok;
+            
             if (lista[0].Equals("mentés"))
             {
                 StreamWriter sw = new StreamWriter("mentes.txt");
@@ -424,6 +426,7 @@ namespace Jatek
             {
                 Console.WriteLine("Előbb ments!");
             }
+            #endregion
             #region leltar
             if (lista[0].Equals("leltár") && leltar.Last().Equals(""))
             {
